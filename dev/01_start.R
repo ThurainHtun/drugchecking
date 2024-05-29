@@ -25,7 +25,7 @@ golem::fill_desc(
   author_first_name = "Thurain", # Your First Name
   author_last_name = "Htun", # Your Last Name
   author_email = "drthurain07@gmail.com", # Your Email
-  repo_url = NULL, # The URL of the GitHub Repo (optional),
+  repo_url = "https://github.com/ThurainHtun/Drug_Checking_Golem.git", # The URL of the GitHub Repo (optional),
   pkg_version = "0.0.0.9000" # The Version of the package containing the App
 )
 
