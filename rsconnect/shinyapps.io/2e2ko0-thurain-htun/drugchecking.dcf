@@ -1,0 +1,12 @@
+name: drugchecking
+title: drugchecking
+username: 2e2ko0-thurain-htun
+account: 2e2ko0-thurain-htun
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 12091770
+bundleId: 8675532
+url: https://2e2ko0-thurain-htun.shinyapps.io/drugchecking/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
