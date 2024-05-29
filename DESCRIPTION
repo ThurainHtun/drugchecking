@@ -1,0 +1,33 @@
+Package: drugchecking
+Title: Drug Checking App
+Version: 0.0.0.9000
+Authors@R: person('Thurain', 'Htun', email = 'drthurain07@gmail.com', role = c('cre', 'aut'))
+Description: This is a drug checking app
+License: MIT + file LICENSE
+Imports: 
+    config (>= 0.3.2),
+    golem (>= 0.4.1),
+    shiny (>= 1.8.0),
+    rsconnect,
+    shinyTime,
+    htmltools,
+    shinyjs, 
+    shinycssloaders,
+    lubridate,
+    dplyr,
+    bslib,
+    shiny.fluent,
+    tidyverse,
+    openxlsx,
+    mongolite,
+    jsonlite,
+    shinyalert,
+    readr,
+    readxl,
+    fontawesome
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.1
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
