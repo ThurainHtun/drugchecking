@@ -63,7 +63,7 @@ app_ui <- function(request) {
                             mod_visit_form_ui("visit_form_1"),
                             ),
                    tabPanel((tags$i(class = "fa-solid fa-vial", style = "font-size: 4rem;")), "Sample",
-                            "sample form")
+                            mod_sample_form_ui("sample_form_1"))
                  )
         ),# end of tabPanel Data Entry
 
@@ -84,9 +84,9 @@ app_ui <- function(request) {
                  tabsetPanel(
 
                    tabPanel(tags$i(class = "fa-solid fa-hospital-user", style = "font-size: 4rem;"),"Technician List",
-                            ""),
+                            mod_technician_list_ui("technician_list_1")),
                    tabPanel((tags$i(class = "fa-solid fa-cannabis", style = "font-size: 4rem;")),"Substance List",
-                            "Substance List"),
+                            mod_Expected_Substance_List_ui("Expected_Substance_List_1")),
                    tabPanel((tags$i(class = "fa-solid fa-user-gear", style = "font-size: 4rem;")),"User Management",
                             "User List"),
 

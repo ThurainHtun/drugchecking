@@ -19,7 +19,7 @@ mod_sample_form_ui <- function(id){
 
     fluidRow(id = ns("search_bar"),
     layout_columns(
-             textInput(ns("vs_id_input"), "Search by Visit ID:",value = ""),
+             textInput(ns("vs_id_input"), "To add new sample, please enter Visit ID here:",value = ""),
              DT::dataTableOutput(ns("data_table")),
              col_widths = c(3,9),
       )),
@@ -41,9 +41,11 @@ mod_sample_form_ui <- function(id){
           textInput(ns("sample_id"),
                     label = "Sample ID:",
                     value = ""),
-          selectInput(ns("expected_sub"),
+          selectizeInput(ns("expected_sub"),
                       label = "Expected Substance:",
-                      choices = NULL),
+                      choices = NULL,
+                      selected = NULL,
+                      options = list(placeholder = 'Search for an option') ),
           textInput(ns("substance_name"),
                     label = "Name of Substance:",
                     value = ""),
@@ -92,7 +94,7 @@ mod_sample_form_ui <- function(id){
             ),
           ),
 
-          col_widths = c(12,3,3,3,3,6,6,6,6,12)
+          col_widths = c(4,4,4,6,6,6,6,6,6,12)
         ),
 
 
@@ -300,35 +302,21 @@ mod_sample_form_server <- function(id){
   moduleServer( id, function(input, output, session){
     ns <- session$ns
 
+    #-----updating dropdown and option list ----
+
+    observe({
+      distinct_esub <- fetch_distinct_values("expected_sub", "expected_substance_name")
+      updateSelectInput(session,
+                        "expected_sub",
+                        label = "Expected Substance:",
+                        choices = distinct_esub,
+                        selected = character(0))
+    })
+
+
     shinyjs::useShinyjs()
 
 
-    # refresh_visit <- function() {
-    #
-    #   # Retrieve data from MongoDB
-    #   data <- mongo_visit$find('{}')
-    #
-    #   return(data)
-    # }
-    #
-    # data <- reactiveVal(refresh_visit())
-    #
-    # # Function to automatically refresh data from MongoDB
-    # auto_refresh <- function() {
-    #   invalidateLater(5000, session)
-    #   data(refresh_visit())
-    # }
-    #
-    # # Refresh data every 5 seconds
-    # observe({
-    #   auto_refresh()
-    # })
-    #
-    #
-    # output$visit_table <- DT::renderDataTable({
-    #   data()
-    # })
-    #
 
     data <- reactive({
       vs_id <- input$vs_id_input

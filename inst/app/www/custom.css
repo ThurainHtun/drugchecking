@@ -2,8 +2,9 @@
 
 .mandatory_star { color: red; }
 
-#visit_form_1-visit_form {
+#visit_form_1-visit_form, #visit_form_1-table_box,#sample_form_1-table_box,#sample_form_1-all_sample_form, #sample_form_1-search_bar  {
    border: solid 1px black;
    padding: 2px;
+   margin: 2px;
 }
 

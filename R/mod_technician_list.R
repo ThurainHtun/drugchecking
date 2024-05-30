@@ -28,13 +28,13 @@ mod_technician_list_ui <- function(id){
               fluidRow(
                 h6(" "),
                 column(width = 3,
-                       actionButton("add_tech",
+                       actionButton(ns("add_tech"),
                                     label = tagList(
                                       icon("add"),
                                       " ADD NEW"),
                                     class = "btn-primary")),
                 column(width = 3,
-                       actionButton("import_tech",
+                       actionButton(ns("import_tech"),
                                     label = tagList(
                                       tags$i(class = "fa-solid fa-file-csv"),
                                       " Import from excel/csv"),
@@ -43,34 +43,34 @@ mod_technician_list_ui <- function(id){
 
               ),
 
-               hidden(div (id = "import_form_tech",
+               hidden(div (id = ns("import_form_tech"),
                            column(width = 3,
-                                  fileInput("file", "Choose CSV or Excel File",
+                                  fileInput(ns("file"), "Choose CSV or Excel File",
                                             multiple = FALSE,
                                             accept = c(".csv", ".xlsx"))),
 
-                           column(width = 3,actionButton("file_upload_tech", "Upload and Append")),
+                           column(width = 3,actionButton(ns("file_upload_tech"), "Upload and Append")),
               )),
 
 
-              hidden(div(id = "technician_form",
+              hidden(div(id = ns("technician_form"),
                           fluidRow(
 
                             column(width = 4,
-                                   textInput("technician_name",
+                                   textInput(ns("technician_name"),
                                              labelMandatory("Technician Name:"),
                                              value = "",
                                              placeholder = "enter technician name"
                                    )),
                             column(width = 4,
-                                   textInput("city",
+                                   textInput(ns("city"),
                                              labelMandatory("City:"),
                                              value = "",
                                              placeholder = "enter city name"
                                    )),
 
                             column(width = 4,
-                                   textInput("site",
+                                   textInput(ns("site"),
                                              labelMandatory("Site:"),
                                              value = "",
                                              placeholder = "enter site name"
@@ -79,7 +79,7 @@ mod_technician_list_ui <- function(id){
 
                           fluidRow(
                             column(width = 3,
-                                   actionButton("submit_tech",
+                                   actionButton(ns("submit_tech"),
                                                 "Submit",
                                                 class = "btn-success")),
 
@@ -90,14 +90,14 @@ mod_technician_list_ui <- function(id){
               layout_columns(
 
                   hidden(
-                  actionButton("update_tech",
+                  actionButton(ns("update_tech"),
                                label = tagList(
                                  icon("pen"),
                                  " Update"),
-                               class = "btn-warning")),
+                               class = "btn-primary")),
 
                   hidden(
-                  actionButton("delete_tech",
+                  actionButton(ns("delete_tech"),
                                label = tagList(
                                  icon("trash-can"),
                                  " Delete"),
@@ -125,15 +125,11 @@ mod_technician_list_server <- function(id){
   moduleServer( id, function(input, output, session){
 
     ns <- session$ns
-    # Connect to MongoDB
-    mongo <- mongo(collection = "technician", db = "drug_checking", url = "mongodb+srv://drthurain07:XtZXZxxgbNB3PT0q@cluster0.cmm67ct.mongodb.net/")
-
 
     #-----Setting up mandatory fields------
     mandatory_technician <- c("technician_name",
                               "city",
                               "site")
-
 
 
     ##---hide submit button if mandatory fields are not entered----
@@ -154,7 +150,7 @@ mod_technician_list_server <- function(id){
 
     # Function to fetch data from MongoDB
     fetch_data <- function() {
-      data <- mongo$find(fields = '{"_id": 1, "technician_name": 1, "city": 1, "site": 1}')
+      data <- mongo_technician$find(fields = '{"_id": 1, "technician_name": 1, "city": 1, "site": 1}')
       data$`_id` <- as.character(data$`_id`) # Convert ObjectId to character
       return(data)
     }
@@ -177,32 +173,24 @@ mod_technician_list_server <- function(id){
     observeEvent(input$submit_tech, {
       shinyjs::hide("technician_form")
       shinyjs::reset("technician_form")
-      # Capture input values
-      new_technician_name <- input$technician_name
-      new_city <- input$city
-      new_site <- input$site
-
-      # Debug print statements
-      print(paste("New Technician Name:", new_technician_name))
-      print(paste("New City:", new_city))
-      print(paste("New Site:", new_site))
-
-
-      # Construct the new document to insert
-      new_technician <- list(
-        technician_name = new_technician_name,
-        city = new_city,
-        site = new_site
+      # Create a new visit document with NULL for missing values
+      new_tech <- list(
+        technician_name = convert_to_character_or_null(input$technician_name),
+        city = convert_to_character_or_null(input$city),
+        site = convert_to_character_or_null(input$site)
       )
 
+      # Convert the document to JSON
+      new_tech_json <- toJSON(new_tech, auto_unbox = TRUE, na = "null")
+
       # Insert the new document into the collection
-      mongo$insert(new_technician)
+      mongo_technician$insert(new_tech_json)
 
       # Show popup message for successful deletion
       shinyalert::shinyalert(title = "Success", text = "Technician added successfully!", type = "success")
 
       # Close MongoDB connection
-      mongo$disconnect()
+      mongo_technician$disconnect()
 
       # Refresh the data
       myData(fetch_data())
@@ -220,10 +208,6 @@ mod_technician_list_server <- function(id){
         currentData <- myData()
         selectedID <- currentData[selected, "_id"]
 
-        # Debug print statements
-        print(paste("Selected ID for update:", selectedID))
-        print(str(currentData))
-
         if (!is.null(selectedID)) {
 
           # Retrieve selected row's data
@@ -235,7 +219,7 @@ mod_technician_list_server <- function(id){
           updateTextInput(session, "site", value = selectedRowData$site)
 
           # Close MongoDB connection
-          mongo$disconnect()
+          mongo_technician$disconnect()
         } else {
           print("Selected ID is null for update")
         }
@@ -261,12 +245,8 @@ mod_technician_list_server <- function(id){
         currentData <- myData()
         selectedID <- currentData[selected, "_id"]
 
-        # Debug print statements
-        print(paste("Selected ID for update:", selectedID))
-        print(str(currentData))
 
         if (!is.null(selectedID)) {
-
 
           # Construct the update document
           updated_tech <- list(
@@ -281,13 +261,13 @@ mod_technician_list_server <- function(id){
           updated_tech_json <- jsonlite::toJSON(updated_tech, auto_unbox = TRUE)
 
           # Update the document
-          mongo$update(query = sprintf('{"_id": {"$oid": "%s"}}', selectedID), update = updated_tech_json)
+          mongo_technician$update(query = sprintf('{"_id": {"$oid": "%s"}}', selectedID), update = updated_tech_json)
 
           # Show popup message for successful deletion
           shinyalert::shinyalert(title = "Success", text = "Technician updated successfully!", type = "success")
 
           # Close MongoDB connection
-          mongo$disconnect()
+          mongo_technician$disconnect()
 
           # Refresh the data
           myData(fetch_data())
@@ -316,7 +296,7 @@ mod_technician_list_server <- function(id){
         print(str(currentData))
 
         if (!is.null(selectedID)) {
-          mongo$remove(paste0('{"_id": {"$oid": "', selectedID, '"}}'))
+          mongo_technician$remove(paste0('{"_id": {"$oid": "', selectedID, '"}}'))
           myData(fetch_data())
           # Show popup message for successful deletion
           shinyalert::shinyalert(title = "Success", text = "Technician deleted successfully!", type = "success")
@@ -386,8 +366,8 @@ mod_technician_list_server <- function(id){
       existing_colnames <- c("_id", "technician_name", "city", "site")
 
       if (validate_tech_data(uploaded_tech_data(), existing_colnames)) {
-        mongo$insert(uploaded_tech_data())
-        mongo$disconnect()
+        mongo_technician$insert(uploaded_tech_data())
+        mongo_technician$disconnect()
         # Refresh the data
         myData(fetch_data())
         showModal(modalDialog(
