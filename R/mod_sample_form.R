@@ -51,10 +51,30 @@ mod_sample_form_ui <- function(id){
                     value = ""),
           selectInput(ns("form"),
                       label = "Form of Substance:",
-                      choices = NULL),
+                      choices = c(
+                        "--select--",
+                        "Powder",
+                        "Crystal(s)",
+                        "Pill/tablet",
+                        "Capsuels (Note Content)",
+                        "Blotter",
+                        "Liquid",
+                        "Others (Specify)")),
           selectInput(ns("color"),
                       label = "Color of Substance:",
-                      choices = NULL),
+                      choices = c(
+                        "--select--",
+                        "Red",
+                        "Pink",
+                        "Yellow",
+                        "Orange",
+                        "Purple",
+                        "Blue",
+                        "Green",
+                        "Grey",
+                        "White",
+                        "Beige",
+                        "Others (Specify)")),
           radioButtons(
             ns("used_substance"),
             label = "Have you already used/consumed this substance?",
@@ -62,9 +82,16 @@ mod_sample_form_ui <- function(id){
             selected = "Not Selected",
             inline = TRUE
           ),
-          selectInput(ns("unusual_effect"),
+          selectizeInput(ns("unusual_effect"),
                       label = "If yes, could you comment on any unexpected or unusual effects it may have caused?",
-                      choices = NULL),
+                      choices = c("Chest Pain", "Diziness", "Tremors", "Dissociated", "Sweating"),
+                      multiple = TRUE,
+                      options = list(
+                        placeholder = 'Select tags...',
+                        maxItems = NULL,
+                        create = TRUE
+                      )
+          ),
           Toggle.shinyInput(
             ns("alert"),
             label = "Alert Recommended",
@@ -105,9 +132,11 @@ mod_sample_form_ui <- function(id){
                       label = "FTIR testing completed?",
                       value = FALSE),
 
-    selectInput(ns("comp1_cat"),
+    selectizeInput(ns("comp1_cat"),
                 label = "Component Name",
-                choices = NULL),
+                choices = NULL,
+                selected = NULL,
+                options = list(placeholder = 'Search for an option') ),
 
     textInput(ns("comp1_dat"),
               label = "Value",
@@ -116,10 +145,12 @@ mod_sample_form_ui <- function(id){
 
     h6("%"),
 
-    selectInput(ns("comp2_cat"),
+    selectizeInput(ns("comp2_cat"),
 
                 label = NULL,
-                choices = NULL),
+                choices = NULL,
+                selected = NULL,
+                options = list(placeholder = 'Search for an option') ),
 
     textInput("comp2_dat",
               label = NULL,
@@ -128,9 +159,11 @@ mod_sample_form_ui <- function(id){
 
     h6("%"),
 
-    selectInput(ns("comp3_cat"),
+    selectizeInput(ns("comp3_cat"),
                 label = NULL,
-                choices = NULL),
+                choices = NULL,
+                selected = NULL,
+                options = list(placeholder = 'Search for an option') ),
 
     textInput(ns("comp3_dat"),
               label = NULL,
@@ -139,10 +172,12 @@ mod_sample_form_ui <- function(id){
 
     h6("%"),
 
-    selectInput(ns("comp4_cat"),
+    selectizeInput(ns("comp4_cat"),
 
                 label = NULL,
-                choices = NULL),
+                choices = NULL,
+                selected = NULL,
+                options = list(placeholder = 'Search for an option') ),
 
     textInput(ns("comp4_dat"),
               label = NULL,
@@ -152,10 +187,12 @@ mod_sample_form_ui <- function(id){
     h6("%"),
 
 
-    selectInput(ns("comp5_cat"),
+    selectizeInput(ns("comp5_cat"),
 
                 label = NULL,
-                choices = NULL),
+                choices = NULL,
+                selected = NULL,
+                options = list(placeholder = 'Search for an option') ),
 
     textInput("comp5_dat",
               label = NULL,
@@ -165,10 +202,12 @@ mod_sample_form_ui <- function(id){
     h6("%"),
 
 
-    selectInput(ns("comp6_cat"),
+    selectizeInput(ns("comp6_cat"),
 
                 label = NULL,
-                choices = NULL),
+                choices = NULL,
+                selected = NULL,
+                options = list(placeholder = 'Search for an option') ),
 
     textInput("comp6_dat",
               label = NULL,
@@ -312,6 +351,44 @@ mod_sample_form_server <- function(id){
                         choices = distinct_esub,
                         selected = character(0))
     })
+
+
+    observe({
+      distinct_sub <- fetch_distinct_values("ftir_sub", "substance_name")
+      updateSelectInput(session,
+                        "comp1_cat",
+                        label = NULL,
+                        choices = distinct_sub,
+                        selected = character(0))
+      updateSelectInput(session,
+                        "comp2_cat",
+                        label = NULL,
+                        choices = distinct_sub,
+                        selected = character(0))
+      updateSelectInput(session,
+                        "comp3_cat",
+                        label = NULL,
+                        choices = distinct_sub,
+                        selected = character(0))
+      updateSelectInput(session,
+                        "comp4_cat",
+                        label = NULL,
+                        choices = distinct_sub,
+                        selected = character(0))
+      updateSelectInput(session,
+                        "comp5_cat",
+                        label = NULL,
+                        choices = distinct_sub,
+                        selected = character(0))
+      updateSelectInput(session,
+                        "comp6_cat",
+                        label = NULL,
+                        choices = distinct_sub,
+                        selected = character(0))
+    })
+
+
+
 
 
     shinyjs::useShinyjs()

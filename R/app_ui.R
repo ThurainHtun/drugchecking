@@ -83,12 +83,13 @@ app_ui <- function(request) {
 
                  tabsetPanel(
 
-                   tabPanel(tags$i(class = "fa-solid fa-hospital-user", style = "font-size: 4rem;"),"Technician List",
+                   tabPanel(tags$i(class = "fa-solid fa-user-gear", style = "font-size: 4rem;"),"User Management",
                             mod_technician_list_ui("technician_list_1")),
-                   tabPanel((tags$i(class = "fa-solid fa-cannabis", style = "font-size: 4rem;")),"Substance List",
+                   tabPanel((tags$i(class = "fa-solid fa-cannabis", style = "font-size: 4rem;")),"Expected Substance List",
                             mod_Expected_Substance_List_ui("Expected_Substance_List_1")),
-                   tabPanel((tags$i(class = "fa-solid fa-user-gear", style = "font-size: 4rem;")),"User Management",
-                            "User List"),
+                   tabPanel((tags$i(class = "fa-solid fa-flask-vial", style = "font-size: 4rem;")),"FTIR Substance List",
+                            mod_ftir_Substance_List_ui("ftir_Substance_List_1")),
+
 
                  )
         ),# end of tabPanel Admin Settings

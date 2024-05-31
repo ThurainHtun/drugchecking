@@ -24,7 +24,7 @@ golem::add_module(name = "visit_form", with_test = TRUE) # Name of the module
 golem::add_module(name = "sample_form", with_test = TRUE) # Name of the module
 golem::add_module(name = "technician_list", with_test = TRUE) # Name of the module
 golem::add_module(name = "Expected_Substance_List", with_test = TRUE) # Name of the module
-
+golem::add_module(name = "ftir_Substance_List", with_test = TRUE) # Name of the module
 
 
 

@@ -30,6 +30,7 @@ mongo_visit <- mongo(collection = "visit", db = "drug_checking", url = "mongodb+
 mongo_sample <- mongo(collection = "sample", db = "drug_checking", url = "mongodb+srv://drthurain07:XtZXZxxgbNB3PT0q@cluster0.cmm67ct.mongodb.net/")
 mongo_technician <- mongo(collection = "technician", db = "drug_checking", url = "mongodb+srv://drthurain07:XtZXZxxgbNB3PT0q@cluster0.cmm67ct.mongodb.net/")
 mongo_expected_sub <- mongo(collection = "expected_sub", db = "drug_checking", url = "mongodb+srv://drthurain07:XtZXZxxgbNB3PT0q@cluster0.cmm67ct.mongodb.net/")
+mongo_ftir_sub <- mongo(collection = "ftir_sub", db = "drug_checking", url = "mongodb+srv://drthurain07:XtZXZxxgbNB3PT0q@cluster0.cmm67ct.mongodb.net/")
 
 
 #function to get distinct list of a field in database table
