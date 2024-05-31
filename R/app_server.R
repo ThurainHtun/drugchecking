@@ -14,6 +14,7 @@ app_server <- function(input, output, session) {
   mod_sample_form_server("sample_form_1")
   mod_technician_list_server("technician_list_1")
   mod_Expected_Substance_List_server("Expected_Substance_List_1")
+  mod_ftir_Substance_List_server("ftir_Substance_List_1")
 
 
 
